@@ -45,9 +45,9 @@ UART_HandleTypeDef huart3;
 
 /* USART3 init function */
 
-void MX_USART3_UART_Init(void)
+void MX_USART1_UART_Init(void)
 {
-  //UART 初始化设置
+   //UART 初始化设置
 	UART1_Handler.Instance=USART1;					    //USART1
 	UART1_Handler.Init.BaudRate=115200;				    //波特率
 	UART1_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
@@ -56,6 +56,10 @@ void MX_USART3_UART_Init(void)
 	UART1_Handler.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //无硬件流控
 	UART1_Handler.Init.Mode=UART_MODE_TX_RX;		    //收发模式
 	HAL_UART_Init(&UART1_Handler);					    //HAL_UART_Init()会使能UART1
+}
+
+void MX_USART3_UART_Init(void)
+{
   
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 115200;
@@ -118,7 +122,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
+    __HAL_UART_ENABLE_IT(uartHandle,UART_IT_RXNE);		//开启接收中断
     /* Peripheral interrupt init */
     HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
